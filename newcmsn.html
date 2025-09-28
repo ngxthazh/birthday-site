@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chúc Mừng Sinh Nhật</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(
+          135deg,
+          rgba(248, 205, 213, 0.9),
+          rgba(255, 200, 221, 0.8),
+          rgba(255, 175, 204, 0.7)
+        );
+        background-size: 400% 400%;
+        animation: dreamyPinkFlow 12s ease-in-out infinite;
+        font-family: "Poppins", sans-serif;
+        overflow: hidden;
+        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="%23ff69b4" stroke="%23e91e63" stroke-width="1"/></svg>')
+            10 10,
+          auto;
+      }
+      @keyframes dreamyPinkFlow {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .congratulations-container {
+        text-align: center;
+        z-index: 10;
+        position: relative;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        animation: containerFloat 3s ease-in-out infinite;
+      }
+      @keyframes containerFloat {
+        0%,
+        100% {
+          transform: translateY(0) scale(1);
+        }
+        50% {
+          transform: translateY(-10px) scale(1.01);
+        }
+      }
+
+      .main-message {
+        font-size: 3em;
+        font-weight: 900;
+        color: #fff;
+        margin-bottom: 20px;
+        white-space: nowrap;
+        border-right: 3px solid #fff;
+        width: fit-content;
+        margin: auto;
+        overflow: hidden;
+      }
+      .typing {
+        animation: typing 4s steps(30, end), blink 0.75s step-end infinite;
+      }
+      @keyframes typing {
+        from {
+          width: 0;
+        }
+        to {
+          width: 100%;
+        }
+      }
+      @keyframes blink {
+        50% {
+          border-color: transparent;
+        }
+      }
+
+      .sub-message {
+        font-size: 1.8em;
+        color: #fff;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        animation: textGlow 3s ease-in-out infinite alternate;
+      }
+      @keyframes textGlow {
+        from {
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        to {
+          text-shadow: 0 2px 10px rgba(255, 255, 255, 0.6);
+        }
+      }
+
+      .fireworks,
+      .heart-images-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 1;
+      }
+      .heart-img-scroll {
+        position: absolute;
+        border-radius: 15px;
+        object-fit: cover;
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        animation: scrollLeftToRight linear;
+        opacity: 0.9;
+        will-change: transform;
+      }
+      @keyframes scrollLeftToRight {
+        0% {
+          transform: translateX(-200px) scale(0.5);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+          transform: translateX(-150px) scale(1);
+        }
+        90% {
+          opacity: 1;
+          transform: translateX(100vw) scale(1);
+        }
+        100% {
+          transform: translateX(110vw) scale(0.5);
+          opacity: 0;
+        }
+      }
+      @media (max-width: 768px) {
+        .main-message {
+          font-size: 2.2em;
+        }
+        .sub-message {
+          font-size: 1.4em;
+        }
+      }
+      @media (max-width: 480px) {
+        .main-message {
+          font-size: 1.8em;
+        }
+        .sub-message {
+          font-size: 1.2em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="fireworks" id="fireworks"></div>
+    <div class="heart-images-container" id="heartImagesContainer"></div>
+
+    <div class="congratulations-container">
+      <h1 class="main-message typing">Happy Birthday!</h1>
+      <p class="sub-message">Chúc bạn thật nhiều niềm vui 🎉</p>
+    </div>
+    <audio id="bgMusic" autoplay loop>
+      <source
+        src="ngan\happy-birthday-to-you-piano-version-13976.mp3"
+        type="audio/mpeg"
+      />
+      Trình duyệt của bạn không hỗ trợ phát nhạc.
+    </audio>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const music = document.getElementById("bgMusic");
+        // Nếu bị chặn, phát nhạc khi người dùng click lần đầu
+        document.body.addEventListener(
+          "click",
+          () => {
+            if (music.paused) {
+              music.play();
+            }
+          },
+          { once: true }
+        );
+      });
+    </script>
+
+    <script>
+      const heartImages = [
+        "ngan/ngan1.jpg",
+        "ngan/ngan2.jpg",
+        "ngan/ngan3.jpg",
+        "ngan/ngan4.jpeg",
+        "ngan/ngan5.jpeg",
+        "ngan/ngan6.jpeg",
+        "ngan/ngan7.jpeg",
+        "ngan/ngan8.jpeg",
+        "ngan/ngan9.jpg",
+        "ngan/ngan10.jpg",
+        "ngan/ngan11.jpeg",
+        "ngan/ngan12.jpeg",
+        "ngan/ngan13.jpeg",
+        "ngan/ngan14.jpeg",
+      ];
+
+      function createScrollingImage(square = true) {
+        const container = document.getElementById("heartImagesContainer");
+        const img = document.createElement("img");
+        img.src = heartImages[Math.floor(Math.random() * heartImages.length)];
+        img.className = "heart-img-scroll";
+        img.style.top = Math.random() * 90 + "vh";
+
+        const duration = square ? 5 + Math.random() * 2 : 4 + Math.random() * 2;
+        img.style.animationDuration = duration + "s";
+
+        if (square) {
+          const size = 180 + Math.random() * 60;
+          img.style.width = size + "px";
+          img.style.height = size + "px";
+        } else {
+          img.style.width = 160 + Math.random() * 60 + "px";
+          img.style.height = 240 + Math.random() * 100 + "px";
+        }
+
+        container.appendChild(img);
+        setTimeout(() => img.remove(), duration * 1000);
+      }
+
+      function startImages() {
+        setInterval(() => createScrollingImage(true), 1200); // ảnh vuông
+        setInterval(() => createScrollingImage(false), 1600); // ảnh chữ nhật
+      }
+
+      // 🎆 Pháo hoa rực rỡ hơn
+      function createFirework() {
+        const fireworks = document.getElementById("fireworks");
+        const colors = [
+          "#ff6b6b",
+          "#ff9ff3",
+          "#feca57",
+          "#1dd1a1",
+          "#54a0ff",
+          "#f368e0",
+          "#ff4757",
+        ];
+        const x = Math.random() * 100,
+          y = Math.random() * 100;
+        for (let i = 0; i < 12; i++) {
+          const spark = document.createElement("div");
+          spark.style.position = "absolute";
+          spark.style.left = x + "%";
+          spark.style.top = y + "%";
+          spark.style.width = "6px";
+          spark.style.height = "6px";
+          spark.style.borderRadius = "50%";
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          spark.style.background = color;
+          spark.style.boxShadow = `0 0 20px ${color},0 0 40px ${color}`;
+          fireworks.appendChild(spark);
+
+          const angle = (i / 12) * 2 * Math.PI;
+          const dx = Math.cos(angle) * 80,
+            dy = Math.sin(angle) * 80;
+          spark.animate(
+            [
+              { transform: "translate(0,0) scale(1)", opacity: 1 },
+              {
+                transform: `translate(${dx}px,${dy}px) scale(0.3)`,
+                opacity: 0,
+              },
+            ],
+            { duration: 1800, easing: "ease-out" }
+          );
+
+          setTimeout(() => spark.remove(), 1800);
+        }
+      }
+      function startFireworks() {
+        setInterval(createFirework, 1200);
+      }
+
+      window.addEventListener("load", () => {
+        startImages();
+        startFireworks();
+      });
+    </script>
+  </body>
+</html>
